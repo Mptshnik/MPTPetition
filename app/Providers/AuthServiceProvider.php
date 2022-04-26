@@ -29,11 +29,11 @@ class AuthServiceProvider extends ServiceProvider
 
         VerifyEmail::toMailUsing(function ($notifiable, $url)
         {
-            $spaUrl = "http://127.0.0.1:8000?email_verify_url={$url}";
+            //$spaUrl = "http://127.0.0.1:8000?email_verify_url=$url";
             return (new MailMessage())
                 ->subject('Подтверждения адреса электронной почты')
                 ->line('Нажмите на кнопку ниже, чтобы подтвердить адрес электронной почты')
-                ->action('', $spaUrl);
+                ->action('', $url);
         });
 
     }

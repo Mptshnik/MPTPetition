@@ -10,6 +10,12 @@ class EmailVerificationController extends Controller
 {
     public function sendVerificationEmail(Request $request)
     {
+
+        if($jwt = $request->cookie('JWT'))
+        {
+            $request->headers->set('Authorization', "Bearer $jwt");
+        }
+
         if($request->User()->hasVerifiedEmail()){
             return[
                 'message' => 'Already verified'
@@ -25,6 +31,7 @@ class EmailVerificationController extends Controller
 
     public function verify(EmailVerificationRequest $request)
     {
+
         if($request->User()->hasVerifiedEmail()){
             return[
                 'message' => 'Already verified'
@@ -32,6 +39,8 @@ class EmailVerificationController extends Controller
         }
 
         if($request->User()->markEmailAsVerified()){
+
+
             event(new Verified($request->User()));
         }
 

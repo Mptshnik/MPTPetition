@@ -12,10 +12,9 @@ class RegistrationController extends Controller
     public function register(Request $request)
     {
         $user = new User();
-       // $user->name = $request->name;
+        $user->name = $request->name;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
-        $user->verification_code = sha1(time());
         $user->save();
 
 

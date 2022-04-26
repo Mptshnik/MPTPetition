@@ -23,4 +23,4 @@ Route::get('user', [\App\Http\Controllers\AuthorizationController::class, 'getCu
 Route::post('logout',[\App\Http\Controllers\AuthorizationController::class, 'logout']);
 
 Route::post('login',[\App\Http\Controllers\AuthorizationController::class, 'login']);
-Route::post('register',[\App\Http\Controllers\AuthorizationController::class, 'register']);
+Route::post('register',[\App\Http\Controllers\RegistrationController::class, 'register']);

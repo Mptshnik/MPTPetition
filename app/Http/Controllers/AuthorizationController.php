@@ -10,19 +10,9 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthorizationController extends Controller
 {
-    public function register(Request $request)
-    {
-        return User::create([
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'password' => Hash::make($request->input('password'))
-        ]);
-    }
-
     public function login(Request $request)
     {
-        if(!Auth::attempt($request->only('email', 'password')))
-        {
+        if (!Auth::attempt($request->only('email', 'password'))) {
             return response([
                 'message' => 'Invalid data'
             ], 401);
@@ -42,8 +32,7 @@ class AuthorizationController extends Controller
 
     public function getCurrentUser()
     {
-        if(!Auth::check())
-        {
+        if (!Auth::check()) {
             return response([
                 'message' => 'unauthorized'
             ]);
@@ -54,8 +43,7 @@ class AuthorizationController extends Controller
 
     public function logout(Request $request)
     {
-        if(!Auth::check())
-        {
+        if (!Auth::check()) {
             return response([
                 'message' => 'unauthorized'
             ]);
@@ -64,7 +52,7 @@ class AuthorizationController extends Controller
         $cookie = Cookie::forget('JWT');
 
         return response([
-           'message' => 'success'
+            'message' => 'success'
         ])->withCookie($cookie);
     }
 }

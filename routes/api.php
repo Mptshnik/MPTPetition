@@ -24,3 +24,8 @@ Route::post('logout',[\App\Http\Controllers\AuthorizationController::class, 'log
 
 Route::post('login',[\App\Http\Controllers\AuthorizationController::class, 'login']);
 Route::post('register',[\App\Http\Controllers\RegistrationController::class, 'register']);
+
+Route::post('email/verification', [\App\Http\Controllers\EmailVerificationController::class, 'sendVerificationEmail'])
+    ->middleware('auth:sanctum');
+Route::get('verify-email/{id}/{hash}', [\App\Http\Controllers\EmailVerificationController::class, 'verify'])
+    ->name('verification.verify')->middleware('auth:sanctum');

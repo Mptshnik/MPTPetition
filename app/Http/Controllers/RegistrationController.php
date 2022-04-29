@@ -11,14 +11,23 @@ class RegistrationController extends Controller
 
     public function register(Request $request)
     {
-        $user = new User();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
-        $user->save();
+        $user = User::where('email', '=', $request->email)->first();
 
+        if($user == null)
+        {
+            $user = new User();
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->password = Hash::make($request->password);
+            $user->save();
+            $user->sendEmailVerificationNotification();
 
-        //Если пользователь существует
+            return [
+                'message' => 'Пользователь успешно зарегистрирован',
+                'verification' => "На почту $user->email отправлено сообщение с подтвеждением"
+            ];
+        }
+
         return [
             'message' => 'Пользователь уже существует!'
         ];

@@ -2,50 +2,36 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 
 class EmailVerificationController extends Controller
 {
-    public function sendVerificationEmail(Request $request)
-    {
-
-        if($jwt = $request->cookie('JWT'))
-        {
-            $request->headers->set('Authorization', "Bearer $jwt");
+    public function verify($user_id, Request $request) {
+        if (!$request->hasValidSignature()) {
+            return response()->json(["msg" => "Invalid/Expired url provided."], 401);
         }
 
-        if($request->User()->hasVerifiedEmail()){
-            return[
-                'message' => 'Already verified'
-            ];
+        $user = User::findOrFail($user_id);
+
+        if (!$user->hasVerifiedEmail()) {
+            $user->markEmailAsVerified();
+            return ['message' => 'Your email has been verified'];
         }
 
-        $request->User()->sendEmailVerificationNotification();
-
-        return [
-            'status' => 'verification-link-sent'
-        ];
+        return ['message' => 'Your email already verified'];
     }
 
-    public function verify(EmailVerificationRequest $request)
-    {
-
-        if($request->User()->hasVerifiedEmail()){
-            return[
-                'message' => 'Already verified'
-            ];
+    public function resendNotification() {
+        if (auth()->user()->hasVerifiedEmail())
+        {
+            return response()->json(["message" => "Email already verified."], 400);
         }
 
-        if($request->User()->markEmailAsVerified()){
+        auth()->user()->sendEmailVerificationNotification();
 
-
-            event(new Verified($request->User()));
-        }
-
-        return[
-            'message' => 'Email has been verified'
-        ];
+        return response()->json(["message" => "Email verification link sent on your email id"]);
     }
 }

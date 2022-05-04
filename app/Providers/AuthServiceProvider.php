@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -26,6 +27,21 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
+/*
+        ResetPassword::toMailUsing(function ($notifiable, $url)
+        {
+            return (new MailMessage())
+                ->subject('Изменение пароля')
+                ->line('Нажмите на кнопку ниже, чтобы изменить пароль')
+                ->action('Изменить', $url);
+        });*/
+/*
+        ResetPassword::createUrlUsing(function ($user, string $token) {
+            $url = url('/reset-password?token'.$token);
+
+            return $url;
+
+        });*/
 
         VerifyEmail::toMailUsing(function ($notifiable, $url)
         {

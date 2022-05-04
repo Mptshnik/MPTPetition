@@ -42,7 +42,9 @@ class AuthorizationController extends Controller
 
     public function getCurrentUser()
     {
-        return Auth::user();
+        $user = Auth::user();
+        $user->petitions;
+        return ['user' => $user];
     }
 
     public function logout(Request $request)
@@ -53,5 +55,10 @@ class AuthorizationController extends Controller
         return response([
             'message' => 'success'
         ])->withCookie($cookie);
+    }
+
+    public function test()
+    {
+        return response(['message' => 'test']);
     }
 }

@@ -29,7 +29,10 @@ class SignaturesController extends Controller
      */
     public function store($id)
     {
-        if(Signature::where('user_id', '=', Auth::user()->getAuthIdentifier(), 'and', 'petition_id', '=', $id)->exists())
+        if(Signature::where([
+            ['user_id', Auth::user()->getAuthIdentifier()],
+            ['petition_id', $id],
+            ])->exists())
         {
             return response()->json(['message'=>'already signed']);
         }
@@ -42,7 +45,10 @@ class SignaturesController extends Controller
 
     public function checkIfSigned($id)
     {
-        if(Signature::where('user_id', '=', Auth::user()->getAuthIdentifier(), 'and', 'petition_id', '=', $id)->exists())
+        if(Signature::where([
+            ['user_id', Auth::user()->getAuthIdentifier()],
+            ['petition_id', $id],
+            ])->exists())
         {
             return response()->json(['message'=>'signed']);
         }
@@ -80,7 +86,11 @@ class SignaturesController extends Controller
      */
     public function destroy($id)
     {
-        $signature = Signature::where('user_id', '=', Auth::user()->getAuthIdentifier(), 'and', 'petition_id', '=', $id);
+        $signature = Signature::where([
+            ['user_id', Auth::user()->getAuthIdentifier()],
+            ['petition_id', $id],
+            ]);
+
         if($signature->exists())
         {
             $signature->delete();

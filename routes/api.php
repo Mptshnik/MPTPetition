@@ -37,6 +37,12 @@ Route::middleware(['auth:sanctum'])->group(function (){
     Route::get('petitions/{id}',[\App\Http\Controllers\PetitionController::class, 'show']);
 });
 
+Route::middleware(['auth:sanctum'])->group(function (){
+    Route::post('petitions/{id}/sign',[\App\Http\Controllers\SignaturesController::class, 'store']);
+    Route::post('petitions/{id}/check-if-signed',[\App\Http\Controllers\SignaturesController::class, 'checkIfSigned']);
+    Route::post('petitions/{id}/unsign',[\App\Http\Controllers\SignaturesController::class, 'destroy']);
+});
+
 Route::post('register',[\App\Http\Controllers\RegistrationController::class, 'register']);
 
 

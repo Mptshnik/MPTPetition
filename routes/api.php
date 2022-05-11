@@ -17,9 +17,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('test', [\App\Http\Controllers\AuthorizationController::class, 'test']);
 
-Route::middleware('guest')->get('show-user/{id}', [\App\Http\Controllers\UserController::class, 'show']);
+Route::middleware('guest')->group(function (){
+    Route::get('petitions',[\App\Http\Controllers\PetitionController::class, 'index']);
+    Route::get('petitions/{id}',[\App\Http\Controllers\PetitionController::class, 'show']);
+    Route::get('users/{id}', [\App\Http\Controllers\UserController::class, 'show']);
+});
 
-Route::post('login',[\App\Http\Controllers\AuthorizationController::class, 'login']);
 
 Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('user', [\App\Http\Controllers\AuthorizationController::class, 'getCurrentUser']);
@@ -33,12 +36,10 @@ Route::middleware(['auth:sanctum'])->group(function (){
     Route::post('make-petition',[\App\Http\Controllers\PetitionController::class, 'store']);
     Route::post('update-petition/{id}',[\App\Http\Controllers\PetitionController::class, 'update']);
     Route::post('delete-petition/{id}',[\App\Http\Controllers\PetitionController::class, 'destroy']);
-    Route::get('petitions',[\App\Http\Controllers\PetitionController::class, 'index']);
-    Route::get('petitions/{id}',[\App\Http\Controllers\PetitionController::class, 'show']);
 });
 
+Route::post('login',[\App\Http\Controllers\AuthorizationController::class, 'login']);
 Route::post('register',[\App\Http\Controllers\RegistrationController::class, 'register']);
-
 
 
 Route::middleware('guest')->post('reset-password', [\App\Http\Controllers\PasswordController::class, 'resetPassword'])

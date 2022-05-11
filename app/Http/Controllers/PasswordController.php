@@ -41,7 +41,11 @@ class PasswordController extends Controller
 
         if($status === Password::PASSWORD_RESET)
         {
-            return ['message' => 'Пароль изменен'];
+            $cookie = Cookie::forget('JWT');
+
+            return response([
+                'message' => 'Пароль изменен'
+            ])->withCookie($cookie);
         }
         else
         {

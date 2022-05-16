@@ -34,13 +34,15 @@ class SignaturesController extends Controller
             ['petition_id', $id],
             ])->exists())
         {
-            return response()->json(['message'=>'already signed']);
+            return response()->json(['message'=>'Петиция уже подписана']);
         }
         $signature = new Signature();
         $signature->user_id = Auth::user()->getAuthIdentifier();
         $signature->petition_id = $id;
         $signature->save();
-        return response()->json(['message' => 'Thank you']);
+
+
+        return response()->json(['message' => 'успешно']);
     }
 
     public function checkIfSigned($id)
@@ -50,33 +52,17 @@ class SignaturesController extends Controller
             ['petition_id', $id],
             ])->exists())
         {
-            return response()->json(['message'=>'signed']);
+            return response()->json([
+                'message'=>'Петиция подписана',
+                'signed' => 'true'
+            ]);
         }
-        else return response()->json(['message'=>'not signed']);
+        else return response()->json([
+        'message'=>'Петиция не подписана',
+        'signed' => 'false'
+    ]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        
-    }
 
     /**
      * Remove the specified resource from storage.
@@ -94,10 +80,12 @@ class SignaturesController extends Controller
         if($signature->exists())
         {
             $signature->delete();
+
             return response()->json([
-                'message' => 'success'
+                'message' => 'успешно'
             ]);
         }
-        else return response(['message'=>'not signed']);
+        else return response(['message'=>'Петиция не подписана']);
     }
+
 }

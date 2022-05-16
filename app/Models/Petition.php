@@ -9,6 +9,7 @@ class Petition extends Model
 {
     use HasFactory;
 
+
     public $timestamps = false;
     protected $fillable = [
         'name',
@@ -16,4 +17,8 @@ class Petition extends Model
         'image'
     ];
 
+    public function signatures()
+    {
+        return $this->hasMany(Signature::class);
+    }
 }

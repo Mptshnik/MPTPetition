@@ -8,13 +8,12 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-
     public function show($id)
     {
         $user = User::find($id);
         if($user == null)
         {
-            return ['message' => 'Not found'];
+            return ['message' => 'Пользователь не найден'];
         }
         $user->petitions;
         return ['user' => $user];
@@ -25,13 +24,13 @@ class UserController extends Controller
         $user = Auth::user();
         $user->delete();
 
-        return response()->json(['message' => 'success']);
+        return response()->json(['message' => 'успешно']);
     }
 
     public function update(Request $request)
     {
         $user = Auth::user();
-        $user->update($request->only(['name', 'email']));
+        $user->update($request->only(['name', 'email', 'surname']));
         $user->save();
 
         return $user;

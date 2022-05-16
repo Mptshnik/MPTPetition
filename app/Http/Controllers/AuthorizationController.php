@@ -10,11 +10,6 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthorizationController extends Controller
 {
-    public function unauthorized(Request $request)
-    {
-        return response(['message' => 'unauthorized']);
-    }
-
     public function login(Request $request)
     {
         $user = User::where('email', '=', $request->email)->first();
@@ -24,7 +19,7 @@ class AuthorizationController extends Controller
 
         if (!Auth::attempt($request->only('email', 'password'))) {
             return response([
-                'message' => 'Invalid data'
+                'message' => 'Не верные данные'
             ], 401);
         }
 
@@ -34,8 +29,9 @@ class AuthorizationController extends Controller
 
         $cookie = cookie('JWT', $token, 24 * 60 * 30); // 30 days
 
+
         return response([
-            'message' => 'success',
+            'message' => 'успешно',
             'token' => $token
         ])->withCookie($cookie);
     }
@@ -53,12 +49,16 @@ class AuthorizationController extends Controller
         $cookie = Cookie::forget('JWT');
 
         return response([
-            'message' => 'success'
+            'message' => 'успешно'
         ])->withCookie($cookie);
     }
 
     public function test()
     {
-        return response(['message' => 'test']);
+        $cookie = cookie('test', 'test', 24 * 60 * 30); // 30 days
+
+        return response([
+            'message' => 'test'
+        ])->withCookie($cookie);
     }
 }

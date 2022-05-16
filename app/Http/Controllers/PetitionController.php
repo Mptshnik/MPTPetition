@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 
 use App\Models\Petition;
+use App\Models\Signature;
 use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +17,15 @@ class PetitionController extends Controller
 {
     public function index()
     {
-        return Petition::all();
+        $allPetitions = Petition::all();
+        $petitions = array();
+        foreach ($allPetitions as $petition)
+        {
+            $signatures = $petition->signatures();
+            $petitions[] = ['petition' => $petition, 'signatures' => $signatures->count()];
+        }
+
+        return ['response' => $petitions];
     }
 
     public function store(Request $request)
@@ -39,12 +48,14 @@ class PetitionController extends Controller
     public function show($id)
     {
         $petition = Petition::find($id);
+
         if($petition == NULL)
         {
-            return response()->json(['message' => 'Not found']);
+            return response()->json(['message' => 'Петиция не найдена']);
         }
+        $signatures = $petition->signatures();
 
-        return $petition;
+        return ['response' => $petition, 'signatures'=>$signatures->count()];
     }
 
     public function update(Request $request, $id)
@@ -52,7 +63,7 @@ class PetitionController extends Controller
         $petition = Petition::find($id);
         if($petition == NULL)
         {
-            return response()->json(['message' => 'Not found']);
+            return response()->json(['message' => 'Петиция не найдена']);
         }
 
         $petition->update($request->only(['name', 'description']));
@@ -71,12 +82,12 @@ class PetitionController extends Controller
         $petition = Petition::find($id);
         if($petition == NULL)
         {
-            return response()->json(['message' => 'Not found']);
+            return response()->json(['message' => 'Петиция не найдена']);
         }
 
         $petition->delete();
         return response()->json([
-            'message' => 'success'
+            'message' => 'успешно'
         ]);
     }
 

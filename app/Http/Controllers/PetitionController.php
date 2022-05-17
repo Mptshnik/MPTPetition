@@ -105,6 +105,10 @@ class PetitionController extends Controller
         {
             $petition->image = $this->loadImageFile($request);
         }
+        else
+        {
+            $petition->image = null;
+        }
 
         $petition->save();
 

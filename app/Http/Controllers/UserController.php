@@ -50,7 +50,10 @@ class UserController extends Controller
         {
             $user->image = ImageLoader::loadImageFile($request);
         }
-
+        else
+        {
+            $user->image = null;
+        }
         $user->save();
 
         return $user;

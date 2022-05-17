@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ImageLoader;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 
 class RegistrationController extends Controller
 {
@@ -20,6 +23,12 @@ class RegistrationController extends Controller
             $user->email = $request->email;
             $user->password = Hash::make($request->password);
             $user->surname = $request->surname;
+
+            if($request->hasFile('image'))
+            {
+                $user->image = ImageLoader::loadImageFile($request);
+            }
+
             $user->save();
             $user->sendEmailVerificationNotification();
 
@@ -33,4 +42,6 @@ class RegistrationController extends Controller
             'message' => 'Пользователь уже существует!'
         ];
     }
+
+
 }

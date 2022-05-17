@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 
+use App\Models\ImageLoader;
 use App\Models\Petition;
 use App\Models\Signature;
 use http\Env\Response;
@@ -37,7 +38,7 @@ class PetitionController extends Controller
 
         if($request->hasFile('image'))
         {
-            $petition->image = $this->loadImageFile($request);
+            $petition->image = ImageLoader::loadImageFile($request);
         }
 
         $petition->save();
@@ -89,22 +90,5 @@ class PetitionController extends Controller
         return response()->json([
             'message' => 'успешно'
         ]);
-    }
-
-    private function loadImageFile(Request $request)
-    {
-        $image = $request->file('image');
-        $fileName = time() . '.' . $image->getClientOriginalExtension();
-
-        $img = Image::make($image->getRealPath());
-        $img->resize(120, 120, function ($constraint) {
-            $constraint->aspectRatio();
-        });
-
-        $img->stream(); // <-- Key point
-
-        Storage::disk('local')->put($fileName, $img, 'public');
-
-        return Storage::disk('local')->url($fileName);
     }
 }

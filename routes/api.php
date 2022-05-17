@@ -20,8 +20,8 @@ Route::middleware('guest')->group(function (){
     Route::get('test', [\App\Http\Controllers\AuthorizationController::class, 'test']);
     Route::post('login',[\App\Http\Controllers\AuthorizationController::class, 'login']);
     Route::get('show-user/{id}', [\App\Http\Controllers\UserController::class, 'show']);
-    Route::get('petitions',[\App\Http\Controllers\PetitionController::class, 'index']);
-    Route::get('petitions/{id}',[\App\Http\Controllers\PetitionController::class, 'show']);
+    Route::get('images',[\App\Http\Controllers\PetitionController::class, 'index']);
+    Route::get('images/{id}',[\App\Http\Controllers\PetitionController::class, 'show']);
     Route::post('register',[\App\Http\Controllers\RegistrationController::class, 'register']);
 });
 
@@ -43,9 +43,9 @@ Route::middleware(['auth:sanctum'])->group(function (){
 });
 
 Route::middleware(['auth:sanctum'])->group(function (){
-    Route::post('petitions/{id}/sign',[\App\Http\Controllers\SignaturesController::class, 'store']);
-    Route::post('petitions/{id}/check-if-signed',[\App\Http\Controllers\SignaturesController::class, 'checkIfSigned']);
-    Route::post('petitions/{id}/unsign',[\App\Http\Controllers\SignaturesController::class, 'destroy']);
+    Route::post('images/{id}/sign',[\App\Http\Controllers\SignaturesController::class, 'store']);
+    Route::post('images/{id}/check-if-signed',[\App\Http\Controllers\SignaturesController::class, 'checkIfSigned']);
+    Route::post('images/{id}/unsign',[\App\Http\Controllers\SignaturesController::class, 'destroy']);
 });
 
 

@@ -68,8 +68,9 @@ class AuthorizationController extends Controller
 
     public function test()
     {
+        //$domain = ($_SERVER['HTTP_HOST'] != 'localhost') ? $_SERVER['HTTP_HOST'] : false;
+       // $cookie = cookie('test', 'test', 24 * 60 * 30, '/', $domain, true); // 30 days
         $cookie = cookie('test', 'test', 24 * 60 * 30); // 30 days
-
         return response([
             'message' => 'test'
         ])->withCookie($cookie);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ImageLoader;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -42,10 +43,17 @@ class UserController extends Controller
         {
             return $validator->errors();
         }
-        
+
         $user->update($request->only(['name', 'email', 'surname']));
+
+        if($request->hasFile('image'))
+        {
+            $user->image = ImageLoader::loadImageFile($request);
+        }
+
         $user->save();
 
         return $user;
     }
+
 }

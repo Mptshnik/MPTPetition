@@ -18,7 +18,7 @@ class EmailVerificationController extends Controller
 
         if (!$user->hasVerifiedEmail()) {
             $user->markEmailAsVerified();
-            return ['message' => 'email успещно подтвержден'];
+            return ['message' => 'email успешно подтвержден'];
         }
 
         return ['message' => 'email уже подтвержден'];

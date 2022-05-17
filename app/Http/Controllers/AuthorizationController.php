@@ -7,20 +7,33 @@ use Illuminate\Support\Facades\Cookie;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class AuthorizationController extends Controller
 {
     public function login(Request $request)
     {
-        $user = User::where('email', '=', $request->email)->first();
-        if (!$user->hasVerifiedEmail()) {
-            return ['message' => 'Не верифицирован'];
+
+        $rules=array(
+            'email'=>'required',
+            'password'=>'required'
+        );
+
+        $validator = Validator::make($request->all(), $rules);
+        if($validator->fails())
+        {
+            return $validator->errors();
         }
 
         if (!Auth::attempt($request->only('email', 'password'))) {
             return response([
                 'message' => 'Не верные данные'
             ], 401);
+        }
+
+        $user = User::where('email', '=', $request->email)->first();
+        if (!$user->hasVerifiedEmail()) {
+            return ['message' => 'Не верифицирован'];
         }
 
         $user = Auth::user();

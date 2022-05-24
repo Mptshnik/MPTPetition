@@ -21,6 +21,8 @@ Route::middleware('guest')->group(function (){
     Route::post('login',[\App\Http\Controllers\AuthorizationController::class, 'login']);
     Route::get('show-user/{id}', [\App\Http\Controllers\UserController::class, 'show']);
     Route::get('petitions',[\App\Http\Controllers\PetitionController::class, 'index']);
+    Route::get('petitions/most-popular',[\App\Http\Controllers\PetitionController::class, 'indexDesc']);
+    Route::get('petitions/recent',[\App\Http\Controllers\PetitionController::class, 'indexRecent']);
     Route::get('petitions/{id}',[\App\Http\Controllers\PetitionController::class, 'show']);
     Route::post('register',[\App\Http\Controllers\RegistrationController::class, 'register']);
 });

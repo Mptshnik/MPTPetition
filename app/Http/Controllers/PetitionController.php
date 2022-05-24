@@ -10,6 +10,7 @@ use App\Models\Signature;
 use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\Facades\Image;
@@ -17,17 +18,28 @@ use Intervention\Image\Facades\Image;
 
 class PetitionController extends Controller
 {
+    public function indexRecent()
+    {
+        $result = Petition::with('votedUsers')->withCount('signatures')->with('author')->paginate(10);
+        $sortedResult = $result->getCollection()->sortByDesc('created_at')->values();
+        $result->setCollection($sortedResult);
+
+        return $result;
+    }
+
+    public function indexDesc()
+    {
+        $result = Petition::with('votedUsers')->withCount('signatures')->with('author')->paginate(10);
+        $sortedResult = $result->getCollection()->sortByDesc('signatures_count')->values();
+        $result->setCollection($sortedResult);
+
+        return $result;
+    }
+
     public function index()
     {
-        $allPetitions = Petition::all();
-        $petitions = array();
-        foreach ($allPetitions as $petition)
-        {
-            $signatures = $petition->signatures();
-            $petitions[] = ['petition' => $petition, 'signatures' => $signatures->count()];
-        }
-
-        return ['response' => $petitions];
+        return Petition::with('votedUsers')->withCount('signatures')->with('author')
+            ->paginate(10);
     }
 
     public function store(Request $request)

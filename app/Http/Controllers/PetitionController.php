@@ -58,8 +58,8 @@ class PetitionController extends Controller
     public function store(Request $request)
     {
         $rules=array(
-            'name'=>'required|unique:petitions,name',
-            'description'=>'required'
+            'name'=>'required|unique:petitions,name|max:255',
+            'description'=>'required|max:10000'
         );
 
         $validator = Validator::make($request->all(), $rules);
@@ -103,8 +103,8 @@ class PetitionController extends Controller
         if($petition->name != $request->name)
         {
             $rules=array(
-                'name'=>'required|unique:petitions,name',
-                'description'=>'required'
+                'name'=>'required|unique:petitions,name|max:255',
+                'description'=>'required|max:10000'
             );
         }
         else

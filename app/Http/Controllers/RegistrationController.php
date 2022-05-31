@@ -15,9 +15,9 @@ class RegistrationController extends Controller
     public function register(Request $request)
     {
         $rules=array(
-            'email'=>'required|email|ends_with:@mpt.ru',
-            'name'=>'required',
-            'surname'=>'required',
+            'email'=>'required|email|ends_with:@mpt.ru|max:255',
+            'name'=>'required|max:255',
+            'surname'=>'required|max:255',
             'password'=>['required', 'min:8', Password::min(8)->mixedCase()->numbers()]
         );
 

@@ -33,9 +33,9 @@ class UserController extends Controller
     {
         $user = Auth::user();
         $rules=array(
-            'email'=>'required|email|ends_with:@mpt.ru',
-            'name'=>'required',
-            'surname'=>'required',
+            'email'=>'required|email|ends_with:@mpt.ru|max:255',
+            'name'=>'required|max:255',
+            'surname'=>'required|max:255',
         );
 
         $validator = Validator::make($request->all(), $rules);

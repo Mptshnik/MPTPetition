@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class PasswordController extends Controller
@@ -18,6 +19,17 @@ class PasswordController extends Controller
         {
             return ['message' => 'Ошибка. Пользователь не найден.'];
         }
+
+        $rules=array(
+            'password'=>['required', 'min:8', Password::min(8)->mixedCase()->numbers()]
+        );
+
+        $validator = Validator::make($request->all(), $rules);
+        if($validator->fails())
+        {
+            return $validator->errors();
+        }
+
 
         if($request['password'] == $request['repeat-password'])
         {

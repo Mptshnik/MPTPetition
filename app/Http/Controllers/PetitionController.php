@@ -42,6 +42,19 @@ class PetitionController extends Controller
             ->paginate(10);
     }
 
+    public function search($name)
+    {
+       // $result = DB::table('petitions')->where('name', 'like', '%'.$request->name.'%');
+       $result = Petition::with('votedUsers')->withCount('signatures')->with('author')
+           ->where('name', 'like', '%'.$name.'%')->get();
+       //with('votedUsers')->withCount('signatures')->with('author')->where('name', 'like', '%'.$request->name.'%')->paginate(10);
+        if($result == NULL)
+        {
+            return response()->json(['message' => 'Петиция с таким названием не найдена']);
+        }
+        return $result;
+    }
+
     public function store(Request $request)
     {
         $rules=array(
@@ -119,8 +132,8 @@ class PetitionController extends Controller
         }
 
         $petition->save();
-
-        return $petition;
+        return Petition::with('votedUsers')->withCount('signatures')->with('author')->find($id);
+        //return $petition->with('votedUsers')->withCount('signatures')->with('author');
     }
 
     public function destroy($id)

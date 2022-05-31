@@ -15,18 +15,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
 Route::middleware('guest')->group(function (){
     Route::get('test', [\App\Http\Controllers\AuthorizationController::class, 'test']);
     Route::post('login',[\App\Http\Controllers\AuthorizationController::class, 'login']);
     Route::get('users/{id}', [\App\Http\Controllers\UserController::class, 'show']);
     Route::get('petitions',[\App\Http\Controllers\PetitionController::class, 'index']);
     Route::get('petitions/most-popular',[\App\Http\Controllers\PetitionController::class, 'indexDesc']);
-    Route::get('petitions/recent',[\App\Http\Controllers\PetitionController::class, 'indexRecent']);
+    Route::get('petitions/{name}', [\App\Http\Controllers\PetitionController::class, 'search']);
+    Route::get('recent-petitions',[\App\Http\Controllers\PetitionController::class, 'indexRecent']);
     Route::get('petitions/{id}',[\App\Http\Controllers\PetitionController::class, 'show']);
     Route::post('register',[\App\Http\Controllers\RegistrationController::class, 'register']);
-    Route::get('image/{fileName}', [\App\Http\Controllers\ImageController::class, 'image']);
 });
+
 
 Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('user', [\App\Http\Controllers\AuthorizationController::class, 'getCurrentUser']);

@@ -52,8 +52,7 @@ class AuthorizationController extends Controller
     public function getCurrentUser()
     {
         $user = Auth::user();
-        $user->petitions;
-        return ['user' => $user];
+        return ['user' => $user, 'petitions' => $user->petitions()->with('votedUsers')->withCount('signatures')->get()];
     }
 
     public function logout(Request $request)

@@ -67,20 +67,16 @@ class PetitionController extends Controller
 
         $petition->save();
 
-        return $petition;
+        $test = base64_decode($petition->image);
+
+        return [$petition, $test];
     }
 
     public function show($id)
     {
-        $petition = Petition::find($id);
+        $petition = Petition::with('votedUsers')->withCount('signatures')->with('author')->find($id);
 
-        if($petition == NULL)
-        {
-            return response()->json(['message' => 'Петиция не найдена']);
-        }
-        $signatures = $petition->signatures();
-
-        return ['response' => $petition, 'signatures'=>$signatures->count()];
+        return $petition;
     }
 
     public function update(Request $request, $id)
@@ -115,7 +111,7 @@ class PetitionController extends Controller
         $petition->update($request->only(['name', 'description']));
         if($request->hasFile('image'))
         {
-            $petition->image = $this->loadImageFile($request);
+            $petition->image = ImageLoader::loadImageFile($request);
         }
         else
         {

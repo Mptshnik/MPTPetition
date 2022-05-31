@@ -3,14 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
+
 
 class ImageLoader
 {
     public static function loadImageFile(Request $request)
     {
-        $image = $request->file('image');
+       /* $image = $request->file('image');
         $fileName = time() . '.' . $image->getClientOriginalExtension();
 
         $img = Image::make($image->getRealPath());
@@ -21,7 +23,15 @@ class ImageLoader
         $img->stream(); // <-- Key point
 
         Storage::disk('local')->put($fileName, $img, 'public');
+        $pathToFile = storage_path().'/app/images/'.$fileName;*/
 
-        return Storage::disk('local')->url($fileName);
+        $path = $request->file('image')->store('images');
+
+
+        $filename = storage_path().'/app/'.$path;
+
+        $filename = str_replace('/var/www/u1659515/data/www/','https://', $filename);
+
+        return base64_encode($filename);
     }
 }

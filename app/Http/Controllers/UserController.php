@@ -17,8 +17,8 @@ class UserController extends Controller
         {
             return ['message' => 'Пользователь не найден'];
         }
-        $user->petitions;
-        return ['user' => $user];
+
+        return ['user' => $user, 'petitions' => $user->petitions()->with('votedUsers')->withCount('signatures')->get()];
     }
 
     public function destroy()
@@ -56,7 +56,7 @@ class UserController extends Controller
         }
         $user->save();
 
-        return $user;
+        return ['user' => $user, 'petitions' => $user->petitions()->with('votedUsers')->withCount('signatures')->get()];
     }
 
 }

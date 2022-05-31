@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::get('unauthorized', function () {
-    return ['message' => 'unauthorized'];
+    return ['message' => 'Не авторизован'];
 })->name('unauthorized');
 
 Route::get('/', function () {
